@@ -2,7 +2,8 @@ export const DEMO_TABLE = 'table-1'
 
 export const multiplayer = (io, socket) => {
   socket.join(DEMO_TABLE)
-  const result = async () => {
+
+  const emitResult = async () => {
     const sockets = await io.fetchSockets()
     const players = sockets
       .filter((socket) => !!socket.player)
@@ -18,21 +19,21 @@ export const multiplayer = (io, socket) => {
       username,
       sp: null,
     }
-    await result()
+    await emitResult()
   }
 
   const vote = async (payload) => {
     socket.player = payload
-    await result()
+    await emitResult()
   }
 
   const check = async (value) => {
     io.in(DEMO_TABLE).emit('multiplayer:check', value)
-    await result()
+    await emitResult()
   }
 
   const disconnect = async () => {
-    await result()
+    await emitResult()
   }
 
   socket.on('multiplayer:join', join)
